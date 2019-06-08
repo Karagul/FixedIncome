@@ -26,12 +26,12 @@ with open("treasuries.csv") as f:
 # transform
 i = 0
 while (i < len(strips)):
-    strips[i][0] = datetime.strptime(strips[i][0], '%m/%d/%y')
+    strips[i][0] = datetime.strptime(strips[i][0], '%m/%d/%Y')
     strips[i][1] = float(strips[i][1])
     i += 1
 i = 0
 while (i < len(treasuries)):
-    treasuries[i][0] = datetime.strptime(treasuries[i][0], '%m/%d/%y')
+    treasuries[i][0] = datetime.strptime(treasuries[i][0], '%m/%d/%Y')
     treasuries[i][1] = float(treasuries[i][1])
     treasuries[i][2] = float(treasuries[i][2])
     i += 1
