@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from DescriptiveStats import DescriptiveStats
 from datetime import datetime
 
+## TODO: FIX SHARPE RATIO CALCULATION
+
 rfr = .0020
 initial_investment = 100.00
 
