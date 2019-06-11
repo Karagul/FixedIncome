@@ -36,4 +36,4 @@ print(round(pv_ann,2))
 
 print("Question 7:")
 print(2*np.rate(nper=40, pmt=30, pv=-893.22, fv=1000))
-print(2*FixedIncome.rate(nper=40, pmt=30, pv=-893.22, fv=1000))
+# print(2*FixedIncome.rate(nper=40, pmt=30, present_value=-893.22, future_value=1000))

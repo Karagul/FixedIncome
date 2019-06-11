@@ -25,15 +25,19 @@ def fv(rate, nper, pv=0.0, pmt=0.0):
     return fv
 
 def rate(nper, pmt, present_value, future_value):
+    """ returns rate """
+    """ while this technically works as-is, should implement using n-r l8r """
+    """ hella slow, just use np.rate for now """
     guess = .010000
     while True:
         rate_pv = -pv(rate=guess, nper=nper, pmt=pmt, fv=future_value)
+        print(rate_pv)
         if(round(rate_pv,4) == round(present_value,4)):
             return guess
         if (rate_pv < present_value):
-            guess -= .000001
+            guess += .000000001
         else:
-            guess += .000001
+            guess -= .000000001
     
     
 def pvp(rate, pmt, growth=0):
