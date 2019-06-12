@@ -1,5 +1,7 @@
-import csv
+import csv, math
 import FixedIncome
+import pandas as pd
+import statsmodels.api as sm
 
 # extract
 with open("strips_curve.csv") as f:
@@ -15,6 +17,7 @@ with open("treasury_curve.csv") as f:
     for row in reader:
         t_data.append(row)
 
+# transform
 i = 0
 s_maturity = []
 s_maturity_2 = []
@@ -23,6 +26,7 @@ s_maturity_4 = []
 s_maturity_5 = []
 s_px = []
 s_discount = []
+s_ln_discount = []
 s_spot = []
 s_forward = []
 while (i < len(s_data)):
@@ -33,6 +37,7 @@ while (i < len(s_data)):
     s_maturity_5.append(s_maturity[i]**5)
     s_px.append(float(s_data[i][1]))
     s_discount.append(s_px[i]/100)
+    s_ln_discount.append(math.log(s_discount[i]))
     s_spot.append(FixedIncome.semiannual_spot_rate(s_discount[i], s_maturity[i]))
     if (i > 0):
         s_forward.append(FixedIncome.forward_rate(s_discount[i], s_discount[i-1], periods=4))
@@ -51,8 +56,7 @@ while (i < len(t_data)):
     t_coupon.append(float(t_data[i][2]))
     t_yield.append(float(t_data[i][3]))
     i += 1
-
-# print data
+'''
 print("---- QUESTION 1 ----")
 print("maturity,price,discount,spot,forward")
 i = 0
@@ -66,14 +70,34 @@ while (i < len(s_data)):
     i += 1
 
 print("---- QUESTION 2 ----")
+'''
+# Step 1: Build data frames
+target_dict = { "ln(d)": s_ln_discount }
+data_dict = { 
+    "m^1": s_maturity,
+    "m^2": s_maturity_2,
+    "m^3": s_maturity_3,
+    "m^4": s_maturity_4,
+    "m^5": s_maturity_5,
+}
+tdf = pd.DataFrame(data=target_dict)
+ddf = pd.DataFrame(data=data_dict)
+
+print(X)
+print(Y)
+
+# run regression with statsmodels.api
+model = sm.OLS(X, Y).fit()
+predictions = model.predict(X)
+model.summary()
+'''
 print("m,m^2,m^3,m^4,m^5")
 i = 0
 while (i < len(s_data)):
-    print(str(round(s_maturity[i],2)), str(round(s_maturity_2[i],2)),
-            str(round(s_maturity_3[i],2)), str(round(s_maturity_4[i],2)),
-            str(round(s_maturity_5[i],2)))
+    print(str(round(s_ln_discount[i],4)), str(round(s_maturity[i],2)), 
+                str(round(s_maturity_2[i],2)), str(round(s_maturity_3[i],2)), 
+                str(round(s_maturity_4[i],2)), str(round(s_maturity_5[i],2)))
     i += 1
-
 
 i = 0
 print("price,maturity,coupon,yield")
@@ -81,3 +105,4 @@ while (i < len(t_data)):
     print(str(round(t_px[i],2)), str(round(t_maturity[i],2)), str(round(t_coupon[i],2)),
             str(round(t_yield[i],2)))
     i += 1
+'''

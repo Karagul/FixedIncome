@@ -1,7 +1,11 @@
 import csv
 from datetime import datetime
 
+''' inputs are treasury and strip fixed income data '''
+''' outputs are arbitrage opportunities '''
+
 def matching_strip(date):
+    ''' finds matching strip for a security '''
     i = 0
     while (i < len(strips)):
         if (strips[i][0] == date):
