@@ -8,6 +8,14 @@ class Instrument():
         self.cash_flows = [float(x) for x in cash_flows]
         self.ppy = ppy
 
+    def price(self):
+        p = 0
+        i = 0
+        while (i < len(self.discounts)):
+            p += self.discounts[i] * self.cash_flows[i]
+            i += 1
+        return p
+
     def macauley_duration(self):
         md = 0
         i = 0
@@ -23,9 +31,10 @@ class Instrument():
     def convexity(self):
         c = 0
         i = 0
-        while (i < len(self.maturities)):
+        while (i < len(self.discounts)):
             pvcf = self.discounts[i] * self.cash_flows[i]
             c += (i+1) * (i+2) * pvcf
             i += 1
+        c = (c * (self.discounts[0]**2)) / self.price()
         return c / (self.ppy ** 2)
 
