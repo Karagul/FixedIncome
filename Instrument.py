@@ -1,6 +1,6 @@
 class Instrument():
 
-    """ a smiple fixed income model """
+    """ a simple fixed income model """
 
     def __init__(self, discounts=[], cash_flows=[], ppy=1):
         """ initialize data """
