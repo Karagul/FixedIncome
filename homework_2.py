@@ -1,6 +1,7 @@
-import csv, math, numpy
+import csv, math
 import FixedIncome
-from sklearn.linear_model import LinearRegression
+from CurveSmoother import CurveSmoother
+
 
 # extract
 with open("strips_curve.csv") as f:
@@ -70,30 +71,9 @@ while (i < len(s_data)):
 '''
 print("---- QUESTION 2 ----")
 
-# Step 1: Build numpy arrays
-x = []
-i = 0
-while (i < len(s_data)):
-    row = []
-    row.append(s_maturity[i])
-    row.append(s_maturity_2[i])
-    row.append(s_maturity_3[i])
-    row.append(s_maturity_4[i])
-    row.append(s_maturity_5[i])
-    x.append(row)
-    i += 1
-y = s_ln_discount
-x, y = numpy.array(x), numpy.array(y)
-
-# Step 2: Create model
-model = LinearRegression().fit(x, y)
-
-# Step 3: Retrieve score
-r_sq = model.score(x, y)
-alpha = model.intercept_
-beta_1 = model.coef_[0]
-beta_2 = model.coef_[1]
-beta_3 = model.coef_[2]
-beta_3 = model.coef_[3]
-beta_4 = model.coef_[4]
+smooth = CurveSmoother(y_data=s_ln_discount, x_data_1=s_maturity, x_data_2=s_maturity_2,
+                        x_data_3=s_maturity_3, x_data_4=s_maturity_4, x_data_5=s_maturity_5)
+alpha, betas = smooth.smooth()
+print("alpha: " + str(alpha))
+print("betas: " + str(betas))
 
