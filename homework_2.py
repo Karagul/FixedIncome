@@ -1,7 +1,6 @@
-import csv, math
+import csv, math, numpy
 import FixedIncome
-import pandas as pd
-import statsmodels.api as sm
+from sklearn.linear_model import LinearRegression
 
 # extract
 with open("strips_curve.csv") as f:
@@ -68,41 +67,33 @@ while (i < len(s_data)):
         print(str(round(s_maturity[i],2)), str(round(s_px[i],2)), str(round(s_discount[i],4)),
                 str(round(s_spot[i],4)))
     i += 1
-
+'''
 print("---- QUESTION 2 ----")
-'''
-# Step 1: Build data frames
-target_dict = { "ln(d)": s_ln_discount }
-data_dict = { 
-    "m^1": s_maturity,
-    "m^2": s_maturity_2,
-    "m^3": s_maturity_3,
-    "m^4": s_maturity_4,
-    "m^5": s_maturity_5,
-}
-tdf = pd.DataFrame(data=target_dict)
-ddf = pd.DataFrame(data=data_dict)
 
-print(X)
-print(Y)
-
-# run regression with statsmodels.api
-model = sm.OLS(X, Y).fit()
-predictions = model.predict(X)
-model.summary()
-'''
-print("m,m^2,m^3,m^4,m^5")
+# Step 1: Build numpy arrays
+x = []
 i = 0
 while (i < len(s_data)):
-    print(str(round(s_ln_discount[i],4)), str(round(s_maturity[i],2)), 
-                str(round(s_maturity_2[i],2)), str(round(s_maturity_3[i],2)), 
-                str(round(s_maturity_4[i],2)), str(round(s_maturity_5[i],2)))
+    row = []
+    row.append(s_maturity[i])
+    row.append(s_maturity_2[i])
+    row.append(s_maturity_3[i])
+    row.append(s_maturity_4[i])
+    row.append(s_maturity_5[i])
+    x.append(row)
     i += 1
+y = s_ln_discount
+x, y = numpy.array(x), numpy.array(y)
 
-i = 0
-print("price,maturity,coupon,yield")
-while (i < len(t_data)):
-    print(str(round(t_px[i],2)), str(round(t_maturity[i],2)), str(round(t_coupon[i],2)),
-            str(round(t_yield[i],2)))
-    i += 1
-'''
+# Step 2: Create model
+model = LinearRegression().fit(x, y)
+
+# Step 3: Retrieve score
+r_sq = model.score(x, y)
+alpha = model.intercept_
+beta_1 = model.coef_[0]
+beta_2 = model.coef_[1]
+beta_3 = model.coef_[2]
+beta_3 = model.coef_[3]
+beta_4 = model.coef_[4]
+
